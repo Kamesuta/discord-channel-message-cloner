@@ -22,6 +22,13 @@ This is a tool to clone an entire Discord channel.
 3. Install dependencies with `npm install`.
 4. Start the cloning process with `npm run start <source channel ID> <destination channel ID>`.
 
+### Resuming the Cloning Process
+
+If the cloning process stops in the middle, you can resume it from where it left off by following these steps:
+
+1. Take note of the ID of the last copied message.
+2. Resume the process by running `npm run start <source channel ID> <destination channel ID> <ID of the last copied message>`.
+
 ## Limitations
 
 - Information such as threads and reactions cannot be copied.

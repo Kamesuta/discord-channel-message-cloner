@@ -8,7 +8,7 @@ import { cloneChannel } from './cloner.js';
 dotenv.config();
 
 // 引数を取得
-const [srcChannelId, dstChannelId] = process.argv.slice(2);
+const [srcChannelId, dstChannelId, continueMessageId] = process.argv.slice(2);
 
 /**
  * Discord Client
@@ -48,7 +48,7 @@ client.on(
       }
 
       // 処理を開始
-      await cloneChannel(srcChannel, dstChannel);
+      await cloneChannel(srcChannel, dstChannel, continueMessageId);
     } catch (error) {
       logger.error(error);
       process.exit(1);
