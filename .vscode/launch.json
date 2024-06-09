@@ -10,7 +10,7 @@
       "name": "Debug",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "--import", "tsx/esm"],
-      "args": ["src/index.ts"],
+      "args": ["src/index.ts", "${input:commandline}"],
       "cwd": "${workspaceRoot}",
       "envFile": "${workspaceFolder}/.env",
       "internalConsoleOptions": "openOnSessionStart",
@@ -22,11 +22,18 @@
       "name": "Debug With Terminal",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "--import", "tsx/esm"],
-      "args": ["src/index.ts"],
+      "args": ["src/index.ts", "${input:commandline}"],
       "cwd": "${workspaceRoot}",
       "envFile": "${workspaceFolder}/.env",
       "skipFiles": ["<node_internals>/**", "node_modules/**"],
       "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "commandline",
+      "type": "promptString",
+      "description": "「<srcChannelId>\" \"<dstChannelId>」と形式で入力してください。区切り位置のダブルクォーテーションは必須です。",
     }
   ]
 }
