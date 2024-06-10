@@ -5,6 +5,7 @@ import {
   TextBasedChannel,
 } from 'discord.js';
 import getWebhook from './getWebhook.js';
+import splitStrings from './splitStrings.js';
 
 /**
  * チャンネルをコピーします
@@ -87,6 +88,29 @@ export async function cloneChannel(
                 threadId: webhook.thread?.id,
                 allowedMentions: { users: [] },
               });
+              return;
+            } else if (error.code === 50035 /* Invalid Form Body */) {
+              // Nitroの人は4000文字のメッセージが送れるが、Botは2000文字までなので、分割して送信
+              const MAX_LENGTH = 2000;
+              const content = message.content ?? '';
+              const chunks = splitStrings(content.split('\n'), MAX_LENGTH - 1); // ゼロ幅スペースを含めるため-1
+              // 2つ目以降のメッセージの先頭にゼロ幅スペースを追加
+              for (let i = 1; i < chunks.length; i++) {
+                chunks[i] = '\u200B' + chunks[i];
+              }
+              // 送信
+              for (const chunk of chunks) {
+                await webhook.webhook.send({
+                  content: chunk,
+                  embeds: message.embeds,
+                  components: message.components,
+
+                  username: member.displayName,
+                  avatarURL: member.displayAvatarURL(),
+                  threadId: webhook.thread?.id,
+                  allowedMentions: { users: [] },
+                });
+              }
               return;
             }
           }
